@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum MatchStatus {
+  SCHEDULED
+  LOCKED
+  FINISHED
+  CANCELLED
+}
+
+enum PredictionResult {
+  PENDING
+  EXACT
+  CORRECT_WINNER
+  WRONG
+  VOID
+}
+
+enum LedgerReason {
+  PREDICTION_EXACT
+  PREDICTION_WINNER
+  SPIN_REWARD
+  REDEMPTION
+  ADMIN_ADJUST
+}
+
+enum RedemptionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FULFILLED
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  passwordHash  String
+  role          Role     @default(USER)
+  pointsBalance Int      @default(0)
+  ticketBalance Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  predictions        Prediction[]
+  ledgerEntries       PointsLedgerEntry[]
+  spinResults         SpinResult[]
+  redemptionRequests  RedemptionRequest[]
+}
+
+model Team {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  shortName String
+  logoUrl   String?
+
+  homeMatches Match[] @relation("HomeTeam")
+  awayMatches Match[] @relation("AwayTeam")
+}
+
+model Match {
+  id            String      @id @default(cuid())
+  homeTeamId    String
+  awayTeamId    String
+  homeTeam      Team        @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam      Team        @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  week          String?
+  startTime     DateTime
+  lockTime      DateTime
+  status        MatchStatus @default(SCHEDULED)
+  homeScore     Int?
+  awayScore     Int?
+  createdAt     DateTime    @default(now())
+
+  predictions Prediction[]
+
+  @@index([startTime])
+}
+
+model Prediction {
+  id            String           @id @default(cuid())
+  userId        String
+  matchId       String
+  user          User             @relation(fields: [userId], references: [id])
+  match         Match            @relation(fields: [matchId], references: [id])
+  predHomeScore Int
+  predAwayScore Int
+  result        PredictionResult @default(PENDING)
+  pointsAwarded Int              @default(0)
+  ticketAwarded Int              @default(0)
+  createdAt     DateTime         @default(now())
+
+  @@unique([userId, matchId])
+}
+
+model PointsLedgerEntry {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  amount    Int
+  reason    LedgerReason
+  note      String?
+  createdAt DateTime     @default(now())
+}
+
+model SpinPrize {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  weight      Int      @default(1)
+  pointsValue Int      @default(0)
+  stock       Int?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  spinResults SpinResult[]
+}
+
+model SpinResult {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  prizeId   String
+  prize     SpinPrize @relation(fields: [prizeId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+model RewardItem {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String
+  pointsCost  Int
+  stock       Int?
+  active      Boolean  @default(true)
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+
+  redemptionRequests RedemptionRequest[]
+}
+
+model RedemptionRequest {
+  id           String            @id @default(cuid())
+  userId       String
+  user         User              @relation(fields: [userId], references: [id])
+  rewardItemId String
+  rewardItem   RewardItem        @relation(fields: [rewardItemId], references: [id])
+  status       RedemptionStatus  @default(PENDING)
+  contactInfo  String
+  adminNote    String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
