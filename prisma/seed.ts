@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Team } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -28,7 +28,7 @@ async function main() {
     ["Dewa United Esports", "DEWA"],
   ];
 
-  const teams = [];
+  const teams: Team[] = [];
   for (const [name, shortName] of teamNames) {
     const team = await prisma.team.upsert({
       where: { name },
@@ -36,6 +36,31 @@ async function main() {
       create: { name, shortName },
     });
     teams.push(team);
+  }
+
+  const playerCount = await prisma.player.count();
+  if (playerCount === 0) {
+    const samplePlayers: [string, number][] = [
+      ["Luminaire", 0],
+      ["Skylar", 0],
+      ["Kiboy", 1],
+      ["Clayyy", 1],
+      ["Kairi", 2],
+      ["CW", 2],
+      ["Celiboy", 3],
+      ["Butss", 3],
+      ["Wise", 4],
+      ["Yenzil", 4],
+      ["Lutpiii", 5],
+      ["Vayneglory", 5],
+    ];
+    await prisma.player.createMany({
+      data: samplePlayers.map(([name, teamIndex]) => ({
+        name,
+        teamId: teams[teamIndex].id,
+        photoUrl: `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(name)}`,
+      })),
+    });
   }
 
   const existingMatches = await prisma.match.count();

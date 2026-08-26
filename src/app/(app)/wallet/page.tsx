@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 const reasonLabel: Record<string, string> = {
   PREDICTION_EXACT: "Tebakan tepat",
   PREDICTION_WINNER: "Tebakan pemenang benar",
+  PLAYER_GUESS: "Tebak pemain benar",
   SPIN_REWARD: "Hadiah spin",
   REDEMPTION: "Tukar hadiah",
   ADMIN_ADJUST: "Penyesuaian admin",

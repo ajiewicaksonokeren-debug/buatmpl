@@ -8,11 +8,12 @@ export default function Home() {
           FREE TO PLAY &middot; TANPA TARUHAN UANG
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
-          Tebak Skor MPL, Kumpulkan Poin, Menangin Hadiah
+          Tebak Skor & Tebak Pemain MPL, Kumpulkan Poin, Menangin Hadiah
         </h1>
         <p className="mt-4 text-neutral-400 text-lg">
-          Prediksi skor pertandingan MPL, dapatkan poin dan tiket spin, lalu tukar
-          poinmu dengan hadiah menarik. Gratis untuk semua orang, tanpa deposit.
+          Prediksi skor pertandingan MPL dan tebak pemain dari fotonya, dapatkan
+          poin dan tiket spin, lalu tukar poinmu dengan hadiah menarik. Gratis
+          untuk semua orang, tanpa deposit.
         </p>
         <div className="mt-8 flex items-center justify-center gap-3">
           <Link
@@ -30,17 +31,21 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mt-20 grid sm:grid-cols-3 gap-6">
+      <div className="mt-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <FeatureCard
           title="1. Tebak Skor"
           desc="Prediksi skor tiap pertandingan sebelum kick-off. Semakin akurat, semakin besar poin & tiket yang kamu dapat."
         />
         <FeatureCard
-          title="2. Putar Spin"
+          title="2. Tebak Pemain"
+          desc="Tebak nama pemain dari fotonya. Setiap pemain hanya bisa dijawab sekali, jawaban benar langsung dapat poin."
+        />
+        <FeatureCard
+          title="3. Putar Spin"
           desc="Setiap tebakan tepat memberimu tiket spin. Setiap putaran dijamin dapat hadiah — tidak ada yang gagal."
         />
         <FeatureCard
-          title="3. Tukar Poin"
+          title="4. Tukar Poin"
           desc="Kumpulkan poin dari prediksi & spin, lalu tukarkan dengan hadiah di katalog — bukan uang tunai."
         />
       </div>
