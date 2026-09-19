@@ -15,8 +15,8 @@ BAHASAN = [
 ]
 
 
-def build(path="output/K3_Komunikasi_Izin_Kerja_Dokumentasi.pptx"):
-    prs = new_deck()
+def build(path="output/K3_Komunikasi_Izin_Kerja_Dokumentasi.pptx", prs=None):
+    prs = prs or new_deck()
     cover(prs, K, "Komunikasi K3, Pengawasan Izin Kerja & Pengelolaan Sistem Dokumentasi K3", 3, "15 menit + 15 menit tanya jawab")
 
     # 2 — ruang lingkup + daftar pembahasan
@@ -137,9 +137,10 @@ def build(path="output/K3_Komunikasi_Izin_Kerja_Dokumentasi.pptx"):
     note(s, X0, 4.00, W, "Target: nihil pekerjaan berisiko tanpa izin kerja dan dokumen K3 siap audit", h=0.28)
     textbox(s, X0, 4.45, W, 0.30, "Terima kasih — siap untuk sesi tanya jawab", 11, NAVY, bold=True, align=PP_ALIGN.CENTER)
 
-    Path(path).parent.mkdir(exist_ok=True)
-    prs.save(path)
-    return path
+    if path:
+        Path(path).parent.mkdir(exist_ok=True)
+        prs.save(path)
+    return path or prs
 
 
 if __name__ == "__main__":

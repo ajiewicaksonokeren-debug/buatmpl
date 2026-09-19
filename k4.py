@@ -13,8 +13,8 @@ BAHASAN = [
 ]
 
 
-def build(path="output/K4_Investigasi_dan_Evaluasi_K3.pptx"):
-    prs = new_deck()
+def build(path="output/K4_Investigasi_dan_Evaluasi_K3.pptx", prs=None):
+    prs = prs or new_deck()
     cover(prs, K, "Investigasi Kecelakaan Kerja & Evaluasi Pemenuhan Persyaratan dan Prosedur K3", 2, "10 menit + 10 menit tanya jawab")
 
     # 2 — ruang lingkup + pembahasan + kasus
@@ -113,9 +113,10 @@ def build(path="output/K4_Investigasi_dan_Evaluasi_K3.pptx"):
     note(s, X0, 4.00, W, "Target: nihil kecelakaan berulang dengan penyebab yang sama (zero repeat accident)", h=0.28)
     textbox(s, X0, 4.45, W, 0.30, "Terima kasih — siap untuk sesi tanya jawab", 11, NAVY, bold=True, align=PP_ALIGN.CENTER)
 
-    Path(path).parent.mkdir(exist_ok=True)
-    prs.save(path)
-    return path
+    if path:
+        Path(path).parent.mkdir(exist_ok=True)
+        prs.save(path)
+    return path or prs
 
 
 if __name__ == "__main__":

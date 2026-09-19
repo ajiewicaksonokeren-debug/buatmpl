@@ -7,4 +7,4 @@ pip install python-pptx pillow lxml
 python3 build.py
 ```
 
-Hasil di `output/`. Peta desain, isi, dan data yang masih dummy: [KNOWLEDGE_GRAPH.md](KNOWLEDGE_GRAPH.md).
+Hasil di `output/`: empat file per kelompok + satu file gabungan 38 slide. Peta desain, isi, dan data yang masih dummy: [KNOWLEDGE_GRAPH.md](KNOWLEDGE_GRAPH.md).
